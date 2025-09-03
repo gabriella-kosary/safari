@@ -1,0 +1,98 @@
+### Visual Studio ###
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# VS cache/options directory
+.vs/
+.vscode/
+
+# NuGet Packages
+*.nupkg
+nuget.exe
+
+# NuGet restore
+**/packages/*
+!**/packages/repositories.config
+
+# MSTest test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Local user-specific files
+*.DotSettings
+
+# Build results for projects
+*.csproj.AssemblyReference.cache
+*.csproj.CopyComplete
+
+# Publish Web Output
+**/publish/
+*.pubxml
+
+### .NET ###
+# Core
+project.lock.json
+appsettings.json
+
+# Ignore local development files (but keep appsettings.json.example)
+appsettings.Development.json
+
+# Rider IDE
+.idea/
+*.sln.iml
+
+### Compiler ###
+*.cache
+*.log
+*.dll
+*.pdb
+*.exe
+*.winmd
+*.json.lock
+*.ilk
+*.meta
+*.dll.config
+*.exp
+*.lib
+*.manifest
+*.ncb
+*.opensdf
+*.pch
+*.rd.xml
+*.sbr
+*.tlog/
+*.tlb
+*.tlh
+*.tmp
+*.tmp_proj
+*.unsuccessfulbuild
+*.vcxproj.filters
+*.vshost.*
+
+### OS ###
+# OS thumbnail cache files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+#Saved Json file
+**/Save.json

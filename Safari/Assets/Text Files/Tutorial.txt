@@ -1,0 +1,46 @@
+A játék egy afrikai szafari park igazgatását mutatja be, felülnézetes 2D pályán.
+
+Alapvető Játékmechanizmusok:
+    • Cél: A szafari park sikeres működtetése.
+        A tőke, az állatok és a turisták számának növelése, valamint bizonyos ideig a nehézségi szinttől függő küszöbértékek fölött tartása.
+        A játék elvesztését a csőd vagy az összes állat kipusztulása jelenti.
+    • Időirányítás: A felhasználói felületen található sebességgombokkal az idő múlásának sebessége módosítható (óra / nap / hét).
+        A napok száma a felhasználói felületen látható.
+    • Tőke: Kezdőtőkével indul a játék. A pénz felhasználható vásárlásokra, például:
+        növények, állatok, dzsippek, utak, vadőrök, chipek.
+        Fenntartási költségekre is szükség van (pl. vadőrök fizetése).
+        Bevételhez vezet az állatok eladása és a turisták általi dzsippbérlés.
+        Az aktuális tőke a felhasználói felület jobb felső részén jelenik meg.
+    • Vásárlás: A vásárolni kívánt elemeket a legördülő menüben lehet kiválasztani.
+        A vásárláshoz a bevásárlókocsi (🛒) ikonnal jelölt gomb használható.
+        A gomb megnyomásával a vásárlási mód aktiválódik (a gomb szürkén jelenik meg).
+        Ezt követően a térképen egy mezőre kattintva az aktuálisan kiválasztott elem lehelyezhető.
+        A vásárlási mód kikapcsolása a gomb újabb megnyomásával történik.
+
+Kiegészítő Funkciók:
+    • Terepi Akadályok:
+        ◦ A térképen terepi akadályok is találhatók: dombok és folyók.
+        ◦ Ezek az akadályok az állatok mozgását lassítják, és az útvonalválasztást befolyásolják.
+        ◦ A dombokról nagyobb távolságra ellátnak az állatok.
+        ◦ A folyók ivóvízforrásként szolgálnak.
+    • Napszakok:
+        ◦ A játékban váltakoznak a napszakok.
+        ◦ Éjjel a térkép csak azon részei láthatók, ahova növényeket, vizet vagy utat helyeztek el.
+        ◦ Az állatok éjjel csak akkor láthatók, ha turisták vagy vadőrök a közelükben vannak, vagy ha helymeghatározó chip van rajtuk.
+        ◦ Az orvvadászok és a vadőrök éjjel is aktívak.
+    • Vadőrök és Irányítható Vadőrök:
+        ◦ Vadőrök vásárolhatók ("Ranger" a listában).
+        ◦ A vadőrök havonta kapnak fizetést.
+        ◦ A vadőrök állatok kilövésére használhatók. A lelőtt állatért pénz jár.
+        ◦ Az orvvadászok elleni védekezésben is részt vesznek: ha egy orvvadász a közelükbe kerül, a vadőr megpróbálja lelőni.
+        ◦ Irányított kilövés: A "kill" mód a 🦹 gombbal aktiválható. Ezután egy vadőr kiválasztható a térképen.
+          Végül egy célpontra (állat vagy észlelt orvvadász) kattintva a vadőr elkezdi üldözni, majd megkísérli lelőni azt.
+    • Orvvadászok:
+        ◦ Az orvvadászok megjelenhetnek a parkban, és megpróbálhatják az állatokat kilőni vagy elfogni.
+        ◦ Az orvvadászok csak akkor láthatók a térképen, ha turisták vagy vadőrök vannak a közelükben.
+        ◦ Védekezéshez vadőrök alkalmazhatók.
+        ◦ Ha meghal az orvvadász, akkor az elfogott állatok kiszabadulnak.
+
+Egyéb UI Elemek:
+    • Az "Új játék" gombbal új játék indítható.
+    • A "Kilépés" gombbal a játékból való kilépés lehetséges.

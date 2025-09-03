@@ -1,0 +1,850 @@
+﻿<Page x:Class="Safari.Views.GameView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Safari.Views"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      mc:Ignorable="d" 
+      d:DesignHeight="708" d:DesignWidth="1200"
+      Title="GameView"
+      Background="Beige">
+    <Page.Resources>
+        <Style x:Key="ComboBoxToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="SandyBrown"/>
+            <Setter Property="BorderBrush" Value="SaddleBrown"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="2"
+                        CornerRadius="3">
+                            <Path x:Name="Arrow"
+                         Fill="SaddleBrown"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Data="M 0 0 L 4 4 L 8 0 Z"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="Peru"/>
+                            </Trigger>
+                            <!-- Add this disabled trigger -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="Red"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="DarkRed"/>
+                                <Setter TargetName="Arrow" Property="Fill" Value="DarkRed"/>
+                                <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="SandyBrown"/>
+            <Setter Property="BorderBrush" Value="SaddleBrown"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="18"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Content area -->
+                            <Border x:Name="ContentBorder"
+                                Grid.Column="0"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3"/>
+
+                            <ContentPresenter Grid.Column="0"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"/>
+
+                            <!-- Toggle Button -->
+                            <ToggleButton Grid.Column="1"
+                                          x:Name="ToggleButton"
+                                          Style="{StaticResource ComboBoxToggleButtonStyle}"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press"/>
+
+                            <!-- Dropdown Popup -->
+                            <Popup x:Name="PART_Popup"
+                             Grid.ColumnSpan="2"
+                             Placement="Bottom"
+                             Focusable="False"
+                             AllowsTransparency="True"
+                             IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}">
+                                <Border Background="SandyBrown"
+                                    BorderBrush="SaddleBrown"
+                                    BorderThickness="1"
+                                    CornerRadius="3">
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ContentBorder" Property="Background" Value="Red"/>
+                                <Setter TargetName="ContentBorder" Property="BorderBrush" Value="DarkRed"/>
+                                <Setter TargetName="ContentBorder" Property="Opacity" Value="0.7"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="SandyBrown"/>
+            <Setter Property="BorderBrush" Value="SaddleBrown"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="108"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="Background" Value="Peru"/>
+                                <Setter Property="BorderBrush" Value="Sienna"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <StackPanel Background="Beige">
+        <!-- *********** Top buttons and stats *********** -->
+        <Border BorderBrush="SaddleBrown" BorderThickness="2" CornerRadius="10" Background="Bisque">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <WrapPanel>
+                    <!-- *********** Buy button *********** -->
+                    <Button Grid.Column="0"
+                            Content="🛒"
+                            FontSize="25"
+                            Margin="10 0 50 0"
+                            Width="35" Height="35"
+                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Command="{Binding BuyColorCommand}"
+                            Background="{Binding BuyColor}"
+                            BorderThickness="1.5">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <!-- ******* Buy selection list ******* -->
+                    <!-- ******* 215 ******* -->
+                    <ComboBox Grid.Column="1"
+                              Width="128"
+                              Height="30"
+                              Margin="0 0 10 0"
+                              IsEnabled="{Binding IsBuySelected}"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              SelectedIndex="{Binding SelectedIndex}">
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/grass.png" Width="20" Height="20"/>
+                                <TextBlock Text="Grass" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/bush.png" Width="20" Height="20"/>
+                                <TextBlock Text="Bush" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/tree.png" Width="20" Height="20"/>
+                                <TextBlock Text="Tree" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/lake.png" Width="20" Height="20"/>
+                                <TextBlock Text="Water" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/Elephant_Base.png" Width="20" Height="20"/>
+                                <TextBlock Text="Elephant" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/Antilope_Base.png" Width="20" Height="20"/>
+                                <TextBlock Text="Antilope" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/Lion_Base.png" Width="20" Height="20"/>
+                                <TextBlock Text="Lion" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/Hyena_Base.png" Width="20" Height="20"/>
+                                <TextBlock Text="Hyena" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/road.png" Width="20" Height="20"/>
+                                <TextBlock Text="Road" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/jeep.png" Width="20" Height="20"/>
+                                <TextBlock Text="Jeep" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/ranger.png" Width="20" Height="20"/>
+                                <TextBlock Text="Ranger" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../Assets/Images/chip.png" Width="20" Height="20"/>
+                                <TextBlock Text="Chip" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                    </ComboBox>
+                    <Border BorderBrush="SaddleBrown" 
+                            BorderThickness="2" Grid.Column="1" 
+                            CornerRadius="10" 
+                            Background="SandyBrown"
+                            Margin="0 0 12 0">
+                        <StackPanel>
+                            <Label Content="Incomplete Road"/>
+                            <Label Content="🚧" FontSize="12" HorizontalAlignment="Center" Width="20" Height="20">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsThereIncompleteRoad}" Value="True">
+                                                <Setter Property="Background" Value="Red"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                <Label.Template>
+                                    <ControlTemplate TargetType="Label">
+                                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Label.Template>
+                            </Label>
+                        </StackPanel>
+                    </Border>
+                </WrapPanel>
+                <!-- ********** Target button ********** -->
+                <Button Grid.Column="2" 
+                        Content="🦹" 
+                        FontSize="30" 
+                        Margin="10 0 50 0" 
+                        Width="35" Height="35" 
+                        HorizontalContentAlignment="Center" 
+                        HorizontalAlignment="Center"
+                        Command="{Binding KillColorCommand}"
+                        Background="{Binding KillColor}"
+                        BorderThickness="1.5">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <!-- *********** Cash amount *********** -->
+                <WrapPanel Grid.Column="3">
+                    <Border BorderBrush="SaddleBrown" BorderThickness="2" CornerRadius="10" Background="SandyBrown" Margin="0 0 5 0">
+                        <StackPanel>
+                            <Label Content="Ranger Selected"/>
+                            <Label Content="⚔️" FontSize="12" HorizontalAlignment="Center" Width="20" Height="20">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsRangerSelected}" Value="True">
+                                                <Setter Property="Background" Value="Red"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                <Label.Template>
+                                    <ControlTemplate TargetType="Label">
+                                        <Border x:Name="border" 
+                                                Background="{TemplateBinding Background}" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                                CornerRadius="10">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Label.Template>
+                            </Label>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="SaddleBrown" BorderThickness="2" CornerRadius="10" Background="SandyBrown">
+                        <StackPanel>
+                            <Label Content="Target Selected"/>
+                            <WrapPanel HorizontalAlignment="Center">
+                                <Label Content="👺" FontSize="12" HorizontalAlignment="Center" Width="20" Height="20">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPoacherSelected}" Value="True">
+                                                    <Setter Property="Background" Value="DarkRed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                    <Label.Template>
+                                        <ControlTemplate TargetType="Label">
+                                            <Border x:Name="border" 
+                                                    Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                                    CornerRadius="10">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Label.Template>
+                                </Label>
+                                <Label Content="🦁" FontSize="12" HorizontalAlignment="Center" Width="20" Height="20">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsCarnivoreSelected}" Value="True">
+                                                    <Setter Property="Background" Value="DarkOrange"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                    <Label.Template>
+                                        <ControlTemplate TargetType="Label">
+                                            <Border x:Name="border" 
+                                                    Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                                    CornerRadius="10">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Label.Template>
+                                </Label>
+                                <Label Content="🦌" FontSize="12" HorizontalAlignment="Center" Width="20" Height="20">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsHerbivoreSelected}" Value="True">
+                                                    <Setter Property="Background" Value="Green"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                    <Label.Template>
+                                        <ControlTemplate TargetType="Label">
+                                            <Border x:Name="border" 
+                                                    Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                                    CornerRadius="10">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Label.Template>
+                                </Label>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                    <Label Grid.Column="0" 
+                       Content="{Binding Money}"
+                       Width="70"
+                       HorizontalContentAlignment="Right" 
+                       VerticalContentAlignment="Center"/>
+                    <Label Content="💰"
+                       Foreground="Green"
+                       FontSize="30"
+                       HorizontalAlignment="Right"/>
+                </WrapPanel>
+            </Grid>
+        </Border>
+
+        <!-- *********** GameBoard area *********** -->
+        <!-- <Border BorderBrush="Black" BorderThickness="1" MaxWidth="1200" MaxHeight="510"> -->
+        <ItemsControl ItemsSource="{Binding Fields}">
+            <!-- Only here for arranging the buttons!! -->
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Height="600" Width="1200">
+                        <Canvas.Style>
+                            <Style TargetType="Canvas">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsNight}" Value="False">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/szafarihatter2_1.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsNight}" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/estihatter2_1.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Canvas.Style>
+                    </Canvas>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <!--<ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>-->
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Rectangle Width="{Binding Width}" Height="{Binding Height}">
+                        <!-- Somehow extremely quick but slows down -->
+                        <Rectangle.RenderTransform>
+                            <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
+                        </Rectangle.RenderTransform>
+                        <Rectangle.Style>
+                            <Style TargetType="Rectangle">
+                                <Setter Property="Fill" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEntity}" Value="True">
+                                        <Setter Property="Panel.ZIndex" Value="1"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsEntity}" Value="False">
+                                        <!-- A 0 az az alapérték, amely a kikapcsolt állapotot jelzi -->
+                                        <Setter Property="Panel.ZIndex" Value="-1"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Elephant_Base">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Elephant_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Antilope_Base">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Antilope_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Lion_Base">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Lion_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Hyena_Base">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Hyena_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Elephant_Eating">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Elephant_Eating.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Antilope_Eating">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Antilope_Eating.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Lion_Eating">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Lion_Eating.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Hyena_Eating">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Hyena_Eating.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Elephant_Resting">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Elephant_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Antilope_Resting">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Antilope_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Lion_Resting">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Lion_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Image}" Value="Hyena_Resting">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/Hyena_Base.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Poacher">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/poacher.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Ranger">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/ranger.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Grass">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/grass.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Bush">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/bush.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Tree">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/tree.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Lake">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/lake.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CanSee}" Value="False">
+                                        <Setter Property="Fill" Value="Transparent"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="River">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/river.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Hill">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/hill.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Road">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/road.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="StartEnd">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/startend.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Jeep">
+                                        <Setter Property="Fill">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="../Assets/Images/jeep.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Empty">
+                                        <Setter Property="Fill" Value="Transparent"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Rectangle.Style>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction 
+                                        Command="{Binding DataContext.RectangleClickCommand,
+                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseEnter">
+                                <i:InvokeCommandAction 
+                                        Command="{Binding DataContext.RectangleHoverCommand,
+                                            RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Rectangle>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <!-- </Border> -->
+
+
+        <!-- *********** Bottom buttons and stats *********** -->
+        <Border BorderBrush="SaddleBrown" 
+                BorderThickness="2" 
+                CornerRadius="10"
+                Background="Bisque">
+            <Grid VerticalAlignment="Center" Height="50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" 
+                Content="New Game" 
+                Width="75" Height="35" 
+                VerticalContentAlignment="Center" 
+                Background="Green"
+                HorizontalAlignment="Left"
+                Foreground="White"
+                Margin="5 0 0 0"
+                Command="{Binding StartCommand}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="20">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Label Content="Carnivores: " 
+                   FontSize="10" 
+                   Grid.Column="1"
+                   Width="70"
+                   Padding="2"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"/>
+                <Label Content="{Binding Carnivores}"
+                   Width="30"
+                   FontSize="10" 
+                   Grid.Column="2"
+                   HorizontalContentAlignment="Left"
+                   VerticalContentAlignment="Center"
+                   Padding="0"/>
+                <Label Content="Herbivores: " 
+                   FontSize="10" 
+                   Grid.Column="3"
+                   Width="70"
+                   Padding="2"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"/>
+                <Label Content="{Binding Herbivores}"
+                   Width="30"
+                   FontSize="10" 
+                   Grid.Column="4"
+                   VerticalContentAlignment="Center"
+                   Padding="0"/>
+                <WrapPanel Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Button Content="Hours" 
+                        Width="60" 
+                        Height="25" 
+                        Background="LightGray"
+                        Command="{Binding SpeedCommand}"
+                        CommandParameter="1">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border"
+                                      Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content="Days" 
+                        Width="60" 
+                        Height="25" 
+                        Background="LightGray"
+                        Command="{Binding SpeedCommand}"
+                        CommandParameter="2">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content="Weeks" 
+                        Width="60" 
+                        Height="25" 
+                        Background="LightGray"
+                        Command="{Binding SpeedCommand}"
+                        CommandParameter="3">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </WrapPanel>
+                <Label Content="Tourists: " 
+                   FontSize="10" 
+                   Grid.Column="6"
+                   Width="70"
+                   Padding="2"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"/>
+                <Label Content="{Binding Tourists}"
+                   Width="30"
+                   FontSize="10" 
+                   Grid.Column="7"
+                   HorizontalContentAlignment="Left"
+                   VerticalContentAlignment="Center"
+                   Padding="0"/>
+                <Label Content="Days: " 
+                   FontSize="10" 
+                   Grid.Column="8"
+                   Width="70"
+                   Padding="2"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"/>
+                <Label Content="{Binding Days}"
+                   Width="30"
+                   FontSize="10" 
+                   Grid.Column="9"
+                   VerticalContentAlignment="Center"
+                   Padding="0"/>
+                <Button Grid.Column="10" 
+                    Content="Exit" 
+                    Width="75" Height="35" 
+                    VerticalContentAlignment="Center" 
+                    Background="DarkRed"
+                    HorizontalAlignment="Left"
+                    Foreground="White"
+                    Margin="0 0 5 0"
+                    Command="{Binding ExitCommand}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="20">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+    </StackPanel>
+</Page>

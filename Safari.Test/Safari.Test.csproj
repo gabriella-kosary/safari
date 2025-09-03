@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="MSTest" Version="3.6.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<PackageReference Include="coverlet.collector" Version="6.0.0">
+  		<PrivateAssets>all</PrivateAssets>
+  		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+  	</PackageReference>
+  	<PackageReference Include="coverlet.msbuild" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Safari.Model\Safari.Model.csproj" />
+    <ProjectReference Include="..\Safari.Persistence\Safari.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SavedGame\" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+  	<CollectCoverage>true</CollectCoverage>
+  	<CoverletOutputFormat>cobertura</CoverletOutputFormat>
+  	<CoverletOutput>$(MSBuildProjectDirectory)/TestResults/</CoverletOutput>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="ViewModels\**" />
+    <Page Remove="ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Safari.Model\Safari.Model.csproj" />
+    <ProjectReference Include="..\Safari.Persistence\Safari.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<Content Include="Views\Assets\Images\*.png">
+  		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  	</Content>
+  </ItemGroup>
+	
+  <ItemGroup>
+  	<Content Include="Assets\Images\*.png">
+  		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  	</Content>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="SavedGame\" />
+  </ItemGroup>
+
+</Project>
